@@ -1,0 +1,13 @@
+{
+  "name": "StudySync — Your study space",
+  "short_name": "StudySync",
+  "description": "Plan, focus, practice, and track your study progress.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f7fb",
+  "theme_color": "#111a35",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

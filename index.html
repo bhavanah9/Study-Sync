@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a35">
+  <meta name="description" content="StudySync — your calm, organized space to plan, learn, and make progress.">
+  <title>StudySync — Your study space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .smart-planner { margin: 1.25rem 0 1.5rem; padding: clamp(1rem, 3vw, 1.6rem); }
+    .smart-planner-heading { margin-bottom: 1.25rem; }
+    .smart-planner-heading h2 { margin: .35rem 0; }
+    .smart-planner-heading p, .smart-plan-hint { color: var(--muted, #7a8298); line-height: 1.6; }
+    .smart-plan-form { display: grid; grid-template-columns: 1fr; gap: .6rem; }
+    .smart-plan-form label { font-weight: 600; margin-top: .35rem; }
+    .smart-plan-form input, .smart-plan-form select, .smart-plan-form textarea { width: 100%; min-width: 0; padding: .8rem .9rem; border: 1px solid var(--border, #dfe3ee); border-radius: 12px; background: var(--surface, #fff); color: inherit; font: inherit; }
+    .smart-plan-form textarea { resize: vertical; line-height: 1.55; }
+    .smart-plan-hint { margin: 0; font-size: .84rem; }
+    .smart-plan-fields { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; margin: .4rem 0; }
+    .smart-plan-fields > div { min-width: 0; display: grid; gap: .45rem; }
+    .smart-plan-form .primary-button { justify-self: start; margin-top: .5rem; cursor: pointer; }
+    .smart-plan-results { margin-top: 1.2rem; }
+    .smart-plan-results > p { color: var(--muted, #7a8298); }
+    .smart-plan-summary { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1rem; }
+    .smart-plan-summary span { border: 1px solid var(--border, #dfe3ee); border-radius: 999px; padding: .4rem .7rem; font-size: .85rem; }
+    .smart-plan-day { border: 1px solid var(--border, #e1e5ef); border-radius: 14px; padding: 1rem; margin: .8rem 0; }
+    .smart-plan-day h3 { margin: 0 0 .7rem; font-size: 1rem; }
+    .smart-plan-session { display: flex; align-items: flex-start; gap: .75rem; padding: .65rem 0; border-top: 1px solid var(--border, #edf0f5); }
+    .smart-plan-session:first-of-type { border-top: 0; }
+    .smart-plan-session-number { flex: 0 0 2rem; height: 2rem; display: grid; place-items: center; border-radius: 10px; background: var(--accent-soft, #edf0ff); color: var(--accent, #5966c9); font-weight: 700; }
+    .smart-plan-session strong { display: block; }
+    .smart-plan-session small { display: block; margin-top: .2rem; color: var(--muted, #7a8298); }
+    .smart-plan-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1rem; }
+    .smart-plan-actions button { cursor: pointer; }
+    .planner-actions-row { align-items: center; justify-content: space-between; margin: .5rem 0 1rem; }
+    @media (max-width: 680px) { .smart-plan-fields { grid-template-columns: 1fr; } .smart-plan-form .primary-button { width: 100%; } }
+  </style>
+
+  <script src="script.js" defer></script>
+
+  <style>
+    .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:16px}.feature-card{padding:clamp(17px,2.5vw,25px);margin-bottom:16px}.feature-card h3{margin:10px 0;color:var(--ink);font:800 17px/1.4 Manrope,sans-serif}.feature-card label,.reminder-settings label{display:block;margin:13px 0 7px;color:#5b647c;font-size:11px;font-weight:700}.feature-input,.reminder-settings input{display:block;width:100%;min-height:42px;padding:11px 12px;border:1px solid #e4e7f0;border-radius:10px;background:#fff;color:var(--ink);font:inherit;font-size:12px}.feature-input:focus{outline:3px solid #5668df18;border-color:#aeb8f5}.feature-form-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}.feature-form-row>div{min-width:0}.feature-actions,.timer-presets{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.feature-output{margin-top:16px;padding:14px;border-radius:12px;background:#f8f9fd;color:#46506b;font-size:12px;line-height:1.8;overflow-wrap:anywhere}.feature-output ol,.feature-output ul{padding-left:22px}.feature-note{color:#8b93a7;font-size:11px;line-height:1.7}.timer-display{margin:18px 0;font:800 clamp(42px,8vw,70px)/1 Manrope,sans-serif;letter-spacing:-2px;color:#5969d2;font-variant-numeric:tabular-nums}.feature-stat-row{display:flex;flex-wrap:wrap;gap:22px;margin:18px 0}.feature-stat-row>div{display:grid;gap:5px;min-width:80px}.feature-stat-row strong{font:800 24px Manrope,sans-serif;color:#5668df}.feature-stat-row small{font-size:10px;color:#858da3}.exam-item{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0f5}.exam-item:last-child{border-bottom:0}.exam-item strong{display:block}.exam-item small{color:#858da3}.exam-item button{border:0;background:transparent;color:#c44c61}.badge-shelf{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.achievement-badge{display:inline-flex;gap:6px;align-items:center;padding:7px 10px;border-radius:9px;background:#f0efff;color:#6356b8;font-size:10px;font-weight:700}.reminder-settings{display:flex;align-items:end;gap:8px;flex-wrap:wrap}.reminder-settings label{margin:0}.reminder-settings input{width:130px}.feature-wide{margin-top:14px}.practice-question{padding:12px 0;border-bottom:1px solid #e7eaf2}.practice-question:last-child{border-bottom:0}.practice-question label{display:flex;align-items:flex-start;gap:8px;font-weight:500;line-height:1.6}.practice-question input{margin-top:3px}.flashcard{border:1px solid #e1e5f2;border-radius:12px;padding:15px;margin-top:10px;background:white}.flashcard button{margin-top:10px}.flashcard-answer{display:none;margin-top:9px;color:#16876b}.flashcard.revealed .flashcard-answer{display:block}.smart-plan-form .primary-button{border:0;border-radius:10px;background:var(--blue);color:white;padding:12px 15px;font-weight:700}.smart-plan-error{color:#c44c61}
+    @media(max-width:720px){.feature-grid{grid-template-columns:1fr}.feature-form-row{grid-template-columns:1fr}.feature-stat-row{gap:16px}.reminder-settings{align-items:stretch;flex-direction:column}.reminder-settings input{width:100%}}
+  </style>
+
+</head>
+<body>
+  <div class="app-shell">
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="StudySync home" data-page-link="dashboard">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>study<span class="brand-light">sync</span><small>YOUR SPACE TO GROW</small></span>
+      </a>
+
+      <div class="side-label">WORKSPACE</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <button class="nav-link active" data-page="dashboard" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/></svg></span>
+          <span>Dashboard</span><span class="nav-indicator"></span>
+        </button>
+        <button class="nav-link" data-page="planner" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M8 3.5v3M16 3.5v3M3.5 9.5h17M8 13h3M8 16h6"/></svg></span>
+          <span>Study planner</span><span class="nav-count" id="pendingCount">0</span>
+        </button>
+        <button class="nav-link" data-page="backlogs" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.2 2"/></svg></span>
+          <span>Backlog tracker</span>
+        </button>
+        <button class="nav-link" data-page="subjects" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 4.5v17M8 6h8M8 10h8"/></svg></span>
+          <span>My subjects</span>
+        </button>
+      </nav>
+
+      <div class="side-label side-label-spaced">LEARNING</div>
+      <nav class="navigation" aria-label="Learning navigation">
+        <button class="nav-link" data-page="pyqs" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h8l4 4V20a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 6 20z"/><path d="M14 3.5v5h4M9 13h6M9 16.5h6"/></svg></span>
+          <span>PYQ library</span>
+        </button>
+        <button class="nav-link" data-page="resources" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/></svg></span>
+          <span>Video resources</span>
+        </button>
+        <button class="nav-link" data-page="focus" type="button"><span class="nav-icon">◷</span><span>Focus room</span></button>
+        <button class="nav-link" data-page="practice" type="button"><span class="nav-icon">✎</span><span>Practice lab</span></button>
+        <button class="nav-link" data-page="exams" type="button"><span class="nav-icon">⌛</span><span>Exam countdown</span></button>
+        <button class="nav-link" data-page="buddy" type="button"><span class="nav-icon">✦</span><span>AI study buddy</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="focus-card">
+          <div class="focus-spark">✦</div>
+          <p class="focus-title">Little by little.</p>
+          <p class="focus-copy">Small steps still move you forward. Keep showing up for yourself.</p>
+          <div class="focus-progress"><span></span></div>
+          <div class="focus-foot"><span>YOUR DAILY REMINDER</span><span>♥</span></div>
+        </div>
+        <button class="nav-link settings-link" data-page="settings" type="button">
+          <span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.1.9-1.4 2.4-1.4-.5a7.8 7.8 0 0 1-1.7 1l-.2 1.5h-2.8l-.2-1.5a7.8 7.8 0 0 1-1.7-1l-1.4.5-1.4-2.4 1.1-.9a7 7 0 0 1 0-2l-1.1-.9 1.4-2.4 1.4.5a7.8 7.8 0 0 1 1.7-1l.2-1.5h2.8l.2 1.5a7.8 7.8 0 0 1 1.7 1l1.4-.5 1.4 2.4-1.1.9a7 7 0 0 1 0 2Z"/></svg></span>
+          <span>Settings</span>
+        </button>
+        <div class="sidebar-caption">MADE FOR YOUR NEXT CHAPTER ✦</div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="mobile-menu" id="mobileMenu" type="button" aria-label="Open navigation" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+          <div>
+            <p class="eyebrow" id="pageEyebrow">YOUR PERSONAL STUDY SPACE</p>
+            <h1 id="pageTitle">Good afternoon<span class="title-period">.</span></h1>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="date-chip"><span class="date-dot"></span><span id="currentDate">Today</span></div>
+          <div class="avatar" aria-label="Student profile">B<span class="avatar-status"></span></div>
+        </div>
+      </header>
+
+      <section class="page active-page" id="page-dashboard" data-page-content="dashboard">
+        <div class="welcome-banner">
+          <div class="welcome-content">
+            <div class="welcome-tag"><span>✦</span> YOUR SPACE, YOUR PACE</div>
+            <h2>Make room for<br><em>what matters.</em></h2>
+            <p>A little progress every day adds up to something wonderful.</p>
+            <button class="button button-light" type="button" data-open-task>
+              <span class="button-plus">+</span> Plan a study session <span class="button-arrow">↗</span>
+            </button>
+          </div>
+          <div class="banner-art" aria-hidden="true">
+            <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+            <div class="art-moon"></div>
+            <div class="art-book book-back"></div><div class="art-book book-front"><span></span><span></span><span></span></div>
+            <div class="art-star star-one">✦</div><div class="art-star star-two">✧</div><div class="art-star star-three">·</div>
+          </div>
+          <div class="banner-grain"></div>
+        </div>
+
+        <div class="section-heading stats-heading">
+          <div><p class="eyebrow">THE BIG PICTURE</p><h2>Your progress, at a glance</h2></div>
+          <span class="quiet-label"><span class="live-dot"></span> YOUR JOURNEY</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">Total study tasks</span><span class="stat-symbol symbol-blue">▤</span></div>
+            <div class="stat-number" id="totalTasks">0</div>
+            <div class="stat-bottom"><span class="stat-note">All the little things</span><span class="stat-mini-line line-blue"></span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">Completed</span><span class="stat-symbol symbol-green">✓</span></div>
+            <div class="stat-number" id="completedTasks">0</div>
+            <div class="stat-bottom"><span class="stat-note">Look at you go</span><span class="stat-mini-line line-green"></span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">Still in progress</span><span class="stat-symbol symbol-violet">◷</span></div>
+            <div class="stat-number" id="pendingTasks">0</div>
+            <div class="stat-bottom"><span class="stat-note">One step at a time</span><span class="stat-mini-line line-violet"></span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span class="stat-label">Overdue tasks</span><span class="stat-symbol symbol-amber">!</span></div>
+            <div class="stat-number" id="overdueTasks">0</div>
+            <div class="stat-bottom"><span class="stat-note">A fresh start is allowed</span><span class="stat-mini-line line-amber"></span></div>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="surface task-surface">
+            <div class="surface-heading">
+              <div><p class="eyebrow">KEEP YOUR MOMENTUM</p><h2>Up next <span class="heading-spark">✳</span></h2><p class="surface-subtitle">Your next steps, all in one place.</p></div>
+              <button class="text-link" data-page-link="planner" type="button">View planner <span>→</span></button>
+            </div>
+            <div class="progress-summary"><div><span class="progress-caption">Overall completion</span><strong id="progressPercent">0%</strong></div><div class="progress-track"><span id="progressBar"></span></div></div>
+            <div class="task-list" id="dashboardTaskList"></div>
+          </section>
+          <aside class="right-column">
+            <section class="surface rhythm-card">
+              <div class="surface-heading compact-heading"><div><p class="eyebrow">A NOTE FOR YOU</p><h2>Gentle reminder</h2></div><span class="note-icon">✧</span></div>
+              <div class="quote-mark">“</div>
+              <p class="gentle-quote" id="gentleQuote">You don't have to do everything today. Just the next right thing.</p>
+              <div class="quote-footer"><span class="quote-line"></span><span>YOUR STUDY BUDDY</span></div>
+            </section>
+            <section class="surface quick-card">
+              <div class="surface-heading compact-heading"><div><p class="eyebrow">QUICK ACCESS</p><h2>Pick up where you left off</h2></div></div>
+              <button class="quick-link" data-page-link="subjects" type="button"><span class="quick-icon quick-book">▤</span><span><strong>My subjects</strong><small>Your learning map</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-link" data-page-link="pyqs" type="button"><span class="quick-icon quick-file">▧</span><span><strong>PYQ library</strong><small>Practice with purpose</small></span><span class="quick-arrow">↗</span></button>
+              <button class="quick-link" data-page-link="resources" type="button"><span class="quick-icon quick-video">▷</span><span><strong>Video resources</strong><small>Learn at your pace</small></span><span class="quick-arrow">↗</span></button>
+            </section>
+          </aside>
+        </div>
+        <footer class="app-footer">Made with patience, plans & a little bit of magic <span>✦</span></footer>
+      </section>
+
+      <section class="page" id="page-planner" data-page-content="planner">
+
+
+        <div class="page-intro-row">
+  <div class="section-intro">
+    <p class="eyebrow">MAKE IT HAPPEN</p>
+    <h2>Your study planner</h2>
+    <p>Turn the big goals into small, doable steps. You've got this.</p>
+  </div>
+</div>
+
+  <!-- Smart Study Plan Generator -->
+<section class="surface smart-planner" aria-labelledby="smartPlannerTitle">
+  <div class="smart-planner-heading">
+    <span class="card-kicker">YOUR PERSONAL STUDY ASSISTANT</span>
+    <h2 id="smartPlannerTitle">Smart Study Plan ✨</h2>
+    <p>Tell StudySync what you need to study. We'll help organize your time.</p>
+  </div>
+
+  <form id="smartPlanForm" class="smart-plan-form">
+    <label for="planMode">Choose your planning style</label>
+    <select id="planMode" required>
+      <option value="balanced">Balanced — share time across subjects</option>
+      <option value="exam">Exam-focused — prioritize upcoming exams</option>
+      <option value="backlog">Backlog-focused — prioritize unfinished topics</option>
+    </select>
+
+    <label for="planSubjects">Subjects, topics and exam dates</label>
+    <textarea
+      id="planSubjects"
+      rows="5"
+      required
+      placeholder="DBMS | Normalization, SQL, Transactions | 2026-10-20&#10;Operating Systems | Scheduling, Deadlocks | 2026-10-24&#10;Artificial Intelligence | Minimax, A-star | 2026-10-28"
+    ></textarea>
+    <p class="smart-plan-hint">
+      One subject per line: Subject | Topic 1, Topic 2 | Exam date (YYYY-MM-DD).
+      For no scheduled exam, leave the date blank after the second |.
+    </p>
+
+    <div class="smart-plan-fields">
+      <div>
+        <label for="planHours">Study hours per day</label>
+        <input id="planHours" type="number" min="1" max="16" value="4" required>
+      </div>
+      <div>
+        <label for="planSessionMinutes">Session length (minutes)</label>
+        <select id="planSessionMinutes">
+          <option value="25">25 minutes</option>
+          <option value="45" selected>45 minutes</option>
+          <option value="60">60 minutes</option>
+          <option value="90">90 minutes</option>
+        </select>
+      </div>
+      <div>
+        <label for="planBreakMinutes">Break between sessions</label>
+        <select id="planBreakMinutes">
+          <option value="5">5 minutes</option>
+          <option value="10" selected>10 minutes</option>
+          <option value="15">15 minutes</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="primary-button" type="submit">
+      Generate my study plan ↗
+    </button>
+  </form>
+
+  <div id="smartPlanResults" class="smart-plan-results" aria-live="polite">
+    <p>Your personalized timetable will appear here.</p>
+  </div>
+</section>
+<!-- End Smart Study Plan Generator -->
+
+<div class="page-intro-row planner-actions-row">
+          <span class="quiet-label">YOUR TASKS, YOUR PACE</span>
+          <button class="button button-primary" data-open-task type="button"><span>+</span> Add a task</button>
+        </div>
+        <div class="filter-row"><label class="search-field"><span>⌕</span><input id="taskSearch" type="search" placeholder="Find a task..." aria-label="Search tasks"></label><select id="taskFilter" aria-label="Filter tasks"><option value="all">All tasks</option><option value="pending">Pending</option><option value="completed">Completed</option><option value="overdue">Overdue</option></select><select id="taskSort" aria-label="Sort tasks"><option value="date">Soonest first</option><option value="priority">Priority</option><option value="created">Recently added</option></select></div>
+        <div class="planner-list surface" id="plannerTaskList"></div>
+      </section>
+
+      <section class="page" id="page-backlogs" data-page-content="backlogs">
+        <div class="page-intro-row"><div class="section-intro"><p class="eyebrow">NO SHAME, JUST A PLAN</p><h2>Backlog tracker</h2><p>Every subject has a way forward. Let's make yours manageable.</p></div><button class="button button-primary" id="addBacklogButton" type="button"><span>+</span> Add a subject</button></div>
+        <div class="backlog-banner"><span class="backlog-banner-icon">✦</span><div><strong>Backlogs are a situation, not your identity.</strong><p>Pick one small topic to work on today. Future-you will be grateful.</p></div></div>
+        <div class="backlog-grid" id="backlogGrid"></div>
+      </section>
+
+      <section class="page" id="page-subjects" data-page-content="subjects">
+        <div class="page-intro-row"><div class="section-intro"><p class="eyebrow">BUILD YOUR KNOWLEDGE</p><h2>My subjects</h2><p>Your learning map, organized by year. Add subjects that match your curriculum.</p></div><button class="button button-primary" id="addSubjectButton" type="button"><span>+</span> Add subject</button></div>
+        <div class="filter-row"><label class="search-field"><span>⌕</span><input id="subjectSearch" type="search" placeholder="Search subjects..." aria-label="Search subjects"></label><select id="subjectYearFilter" aria-label="Filter by academic year"><option value="all">All years</option><option value="1">1st year</option><option value="2">2nd year</option><option value="3">3rd year</option><option value="4">4th year</option></select></div>
+        <div class="subject-grid" id="subjectGrid"></div>
+      </section>
+
+      <section class="page" id="page-pyqs" data-page-content="pyqs">
+        <div class="section-intro"><p class="eyebrow">PRACTICE WITH PURPOSE</p><h2>PYQ library</h2><p>Keep previous-paper links and practice material in one organized place.</p></div>
+        <div class="resource-add-row"><label class="search-field"><span>⌕</span><input id="pyqSearch" type="search" placeholder="Search papers..." aria-label="Search papers"></label><button class="button button-primary" id="addPyqButton" type="button"><span>+</span> Add resource</button></div>
+        <div class="resource-grid" id="pyqGrid"></div>
+      </section>
+
+      <section class="page" id="page-resources" data-page-content="resources">
+        <div class="section-intro"><p class="eyebrow">LEARN AT YOUR PACE</p><h2>Video resources</h2><p>Save useful lessons and revisit them when you need a refresher.</p></div>
+        <div class="resource-add-row"><label class="search-field"><span>⌕</span><input id="videoSearch" type="search" placeholder="Search videos..." aria-label="Search videos"></label><button class="button button-primary" id="addVideoButton" type="button"><span>+</span> Add video</button></div>
+        <div class="resource-grid" id="videoGrid"></div>
+      </section>
+
+      <section class="page" id="page-focus" data-page-content="focus">
+        <div class="section-intro"><p class="eyebrow">ONE THING AT A TIME</p><h2>Focus room</h2><p>Choose a focus interval, start the timer, and give one task your attention.</p></div>
+        <div class="feature-grid"><section class="surface feature-card"><span class="card-kicker">POMODORO TIMER</span><div class="timer-display" id="focusTimerDisplay">25:00</div><div class="timer-presets"><button class="button button-quiet" data-timer-minutes="25" type="button">Focus 25</button><button class="button button-quiet" data-timer-minutes="45" type="button">Focus 45</button><button class="button button-quiet" data-timer-minutes="5" type="button">Short break 5</button></div><label for="focusTaskLabel">What are you focusing on?</label><input id="focusTaskLabel" class="feature-input" placeholder="e.g. Revise DBMS normalization"><div class="feature-actions"><button class="button button-primary" id="focusStartButton" type="button">Start focus</button><button class="button button-quiet" id="focusPauseButton" type="button">Pause</button><button class="button button-quiet" id="focusResetButton" type="button">Reset</button></div><p class="feature-note" id="focusTimerStatus" aria-live="polite">Ready when you are. Focus sessions earn XP when completed.</p></section>
+        <section class="surface feature-card"><span class="card-kicker">YOUR CONSISTENCY</span><div class="feature-stat-row"><div><strong id="focusSessionsCount">0</strong><small>Focus sessions</small></div><div><strong id="focusMinutesCount">0</strong><small>Minutes focused</small></div></div><p class="feature-note">Tip: put your phone away, keep one tab open, and choose a small goal.</p></section></div>
+      </section>
+
+      <section class="page" id="page-practice" data-page-content="practice">
+        <div class="section-intro"><p class="eyebrow">RECALL, PRACTICE, IMPROVE</p><h2>Practice lab</h2><p>Build a quick practice paper, quiz yourself, and save flashcards. Quiz scores help identify topics to revise.</p></div>
+        <div class="feature-grid"><section class="surface feature-card"><span class="card-kicker">QUESTION PAPER GENERATOR</span><h3>Build a practice paper</h3><label for="paperSubject">Subject</label><input class="feature-input" id="paperSubject" placeholder="e.g. Operating Systems"><label for="paperTopics">Topics (one per line or comma-separated)</label><textarea class="feature-input" id="paperTopics" rows="4" placeholder="CPU scheduling, deadlocks, memory management"></textarea><div class="feature-form-row"><div><label for="paperQuestionCount">Questions</label><select class="feature-input" id="paperQuestionCount"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div><div><label for="paperMarks">Marks each</label><select class="feature-input" id="paperMarks"><option>2</option><option selected>5</option><option>10</option></select></div></div><button class="button button-primary" id="generatePaperButton" type="button">Generate paper</button><div id="paperOutput" class="feature-output" aria-live="polite">Your practice paper will appear here.</div></section>
+        <section class="surface feature-card"><span class="card-kicker">QUIZ & FLASHCARDS</span><h3>Create your own revision deck</h3><p class="feature-note">Add one question and answer per line, separated by a | character. Example: What is a process? | A program in execution.</p><label for="flashcardInput">Question | Answer</label><textarea class="feature-input" id="flashcardInput" rows="5" placeholder="What is normalization? | A process to reduce data redundancy.&#10;What is a deadlock? | A state where processes wait indefinitely."></textarea><button class="button button-primary" id="loadFlashcardsButton" type="button">Create quiz & flashcards</button><div id="flashcardOutput" class="feature-output" aria-live="polite">Your deck will appear here.</div></section></div>
+        <section class="surface feature-card feature-wide"><span class="card-kicker">WEAK TOPIC DETECTOR</span><h3>Topics to revisit</h3><p class="feature-note">Based on the quiz results you record in this app. It doesn't infer mastery without your answers.</p><div id="weakTopicsOutput" class="feature-output">Complete a quiz to start tracking topics that need revision.</div></section>
+      </section>
+
+      <section class="page" id="page-exams" data-page-content="exams">
+        <div class="section-intro"><p class="eyebrow">MAKE THE DEADLINE VISIBLE</p><h2>Exam countdown & emergency mode</h2><p>Add exams and get a clear countdown. Emergency mode builds a short priority checklist from the days remaining.</p></div>
+        <section class="surface feature-card"><div class="feature-form-row"><div><label for="examName">Exam or subject</label><input class="feature-input" id="examName" placeholder="e.g. DBMS mid exam"></div><div><label for="examDate">Exam date</label><input class="feature-input" id="examDate" type="date"></div></div><button class="button button-primary" id="addExamButton" type="button">Add exam</button><div id="examList" class="exam-list"></div></section>
+        <section class="surface feature-card feature-wide"><span class="card-kicker">EMERGENCY REVISION MODE</span><h3>Need a last-minute plan?</h3><p class="feature-note">Choose an exam above, then generate a focused checklist. Use it as a guide, not a guarantee of exam coverage.</p><button class="button button-primary" id="emergencyPlanButton" type="button">Generate emergency revision plan</button><div id="emergencyOutput" class="feature-output">Your emergency plan will appear here.</div></section>
+      </section>
+
+      <section class="page" id="page-buddy" data-page-content="buddy">
+        <div class="section-intro"><p class="eyebrow">ASK, UNDERSTAND, KEEP GOING</p><h2>AI study buddy</h2><p>A built-in study helper for explanations, revision prompts, and next steps. This offline version uses guided responses; live generative AI requires connecting an API/backend.</p></div>
+        <section class="surface feature-card"><label for="buddyQuestion">What are you stuck on?</label><textarea class="feature-input" id="buddyQuestion" rows="4" placeholder="Explain deadlock like I'm 12, compare BFS and DFS, or help me plan DBMS revision..."></textarea><div class="feature-actions"><button class="button button-primary" id="askBuddyButton" type="button">Help me understand</button><button class="button button-quiet" data-buddy-prompt="Give me a 20-minute revision plan for one difficult topic." type="button">Quick revision plan</button><button class="button button-quiet" data-buddy-prompt="Quiz me with 5 questions on my current subject." type="button">Quiz me</button></div><div id="buddyOutput" class="feature-output" aria-live="polite">Tell me the topic and I'll help you break it into smaller steps.</div></section>
+        <section class="surface feature-card feature-wide"><span class="card-kicker">PROGRESS & REWARDS</span><div class="feature-stat-row"><div><strong id="xpTotal">0 XP</strong><small>Total experience</small></div><div><strong id="streakTotal">0 days</strong><small>Current study streak</small></div><div><strong id="badgeTotal">0</strong><small>Badges earned</small></div></div><div id="badgeShelf" class="badge-shelf"></div><div class="feature-actions"><button class="button button-primary" id="enableNotificationsButton" type="button">Enable browser notifications</button><button class="button button-quiet" id="testReminderButton" type="button">Test a study reminder</button></div><p class="feature-note">Browser notifications depend on permission and browser support. Notifications while the page is closed require a hosted PWA/service worker and may need extra setup.</p></section>
+      </section>
+
+      <section class="page" id="page-settings" data-page-content="settings">
+        <div class="section-intro"><p class="eyebrow">MAKE IT YOURS</p><h2>Settings</h2><p>Keep your study space comfortable and your data under your control.</p></div>
+        <section class="surface settings-card"><div><p class="eyebrow">YOUR DATA</p><h3>StudySync data</h3><p class="settings-description">Your current version saves data in this browser on this device. Clearing browser data may remove it.</p></div><button class="button button-danger" id="clearDataButton" type="button">Clear all saved data</button></section>
+        <section class="surface settings-card"><div><p class="eyebrow">A LITTLE ENCOURAGEMENT</p><h3>Choose your study buddy's tone</h3><p class="settings-description">You can keep it gentle or get a tiny bit of playful accountability.</p></div><select id="toneSelect" aria-label="Choose reminder tone"><option value="gentle">Gentle</option><option value="playful">Playful Telugu-English</option></select></section>
+        <section class="surface settings-card"><div><p class="eyebrow">STUDY REMINDERS</p><h3>Daily reminder</h3><p class="settings-description">Schedule a reminder while StudySync is open. Browser permission is needed for notification pop-ups.</p></div><div class="reminder-settings"><label for="reminderTime">Reminder time</label><input id="reminderTime" type="time" value="19:00"><button class="button button-primary" id="saveReminderButton" type="button">Save reminder</button></div></section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-heading"><div><p class="eyebrow" id="modalEyebrow">MAKE A PLAN</p><h2 id="modalTitle">Add a study task</h2></div><button class="modal-close" id="modalClose" type="button" aria-label="Close dialog">×</button></div>
+      <form id="taskForm">
+        <input type="hidden" id="taskId">
+        <label for="taskTitle">What do you want to work on?</label><input id="taskTitle" name="title" required maxlength="100" placeholder="e.g. Revise DBMS normalization">
+        <div class="form-two"><div><label for="taskSubject">Subject</label><input id="taskSubject" name="subject" maxlength="60" placeholder="e.g. DBMS"></div><div><label for="taskDue">Due date</label><input id="taskDue" name="due" type="date" required></div></div>
+        <div class="form-two"><div><label for="taskPriority">Priority</label><select id="taskPriority" name="priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></div><div><label for="taskStatus">Status</label><select id="taskStatus" name="status"><option value="pending">Pending</option><option value="completed">Completed</option></select></div></div>
+        <div class="modal-actions"><button class="button button-quiet" id="cancelModal" type="button">Cancel</button><button class="button button-primary" type="submit" id="saveTaskButton">Save task <span>↗</span></button></div>
+      </form>
+    </section>
+  </div>
+
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
